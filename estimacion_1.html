@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fundamentos de la Estimación de Software</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Prism.js for syntax highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+<!-- Header -->
+<header class="bg-blue-900 text-white py-6">
+    <div class="container mx-auto px-4">
+        <h1 class="text-3xl font-bold">Fundamentos de la Estimación de Software</h1>
+        <p class="mt-2 text-lg"><i class="fas fa-clock mr-2"></i>Duración: 3 Horas</p>
+        <p class="mt-1"><i class="fas fa-bullseye mr-2"></i>Objetivo: Comprender la importancia de la estimación, familiarizarse con los conceptos básicos de costos y configurar el entorno de trabajo práctico con Python y Excel.</p>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="container mx-auto px-4 py-8">
+    <!-- Part 1: Conceptos Fundamentales -->
+    <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-2xl font-semibold text-blue-900 mb-4"><i class="fas fa-book mr-2"></i>Parte 1: Conceptos Fundamentales </h2>
+
+        <!-- 1.1 ¿Qué es Estimar en Software? -->
+        <div class="mb-6">
+            <h3 class="text-xl font-medium text-gray-800">1.1 ¿Qué es Estimar en Software y por qué es Crucial?</h3>
+            <p class="mt-2 text-gray-600"><strong>Discusión inicial:</strong> Pregunta a los estudiantes: <em>"¿Por qué creen que es importante estimar cuánto tiempo y dinero costará un proyecto de software?"</em></p>
+            <p class="mt-2 text-gray-600"><strong>Explicación:</strong></p>
+            <ul class="list-disc list-inside mt-2 text-gray-600">
+                <li><strong>Para el negocio:</strong> Permite tomar decisiones informadas, asegurar presupuestos y planificar estrategias de lanzamiento.</li>
+                <li><strong>Para el equipo de desarrollo:</strong> Ayuda a gestionar expectativas, planificar el trabajo y evitar el agotamiento.</li>
+                <li><strong>Para el cliente:</strong> Proporciona transparencia y confianza en la inversión.</li>
+            </ul>
+        </div>
+
+        <!-- 1.2 Precisión vs. Exactitud -->
+        <div class="mb-6">
+            <h3 class="text-xl font-medium text-gray-800">1.2 Precisión vs. Exactitud: El Cono de la Incertidumbre</h3>
+            <p class="mt-2 text-gray-600"><strong>Concepto clave:</strong> La estimación no es una ciencia exacta. Al inicio, las estimaciones tienen un rango amplio (60%-160%), pero se reducen con más información.</p>
+            <div class="mt-4">
+                <img src="https://i0.wp.com/internet80.com/wp-content/uploads/2017/08/ConoIncertidumbre02.png?ssl=1" alt="Cono de la Incertidumbre" class="w-full max-w-md mx-auto rounded-lg shadow">
+                <p class="text-center text-sm text-gray-500 mt-2">Imagen del Cono de la Incertidumbre (Fuente: Wikimedia Commons)</p>
+            </div>
+        </div>
+
+        <!-- 1.3 Tipos de Costos -->
+        <div>
+            <h3 class="text-xl font-medium text-gray-800">1.3 Tipos de Costos en un Proyecto de Software</h3>
+            <p class="mt-2 text-gray-600"><strong>Definición de Costos Directos:</strong> Son los gastos atribuibles directamente al desarrollo del proyecto de software, relacionados con los recursos específicos utilizados en la creación del producto.</p>
+            <ul class="list-disc list-inside mt-2 text-gray-600">
+                <li><strong>Salarios y Honorarios:</strong> Costo del tiempo del equipo (desarrolladores, diseñadores, testers).</li>
+                <li><strong>Software y Licencias:</strong> Herramientas, IDEs, sistemas operativos necesarios para el desarrollo.</li>
+                <li><strong>Hardware y Equipos:</strong> Computadores, servidores dedicados al proyecto.</li>
+            </ul>
+            <p class="mt-2 text-gray-600"><strong>Definición de Costos Indirectos (Overhead):</strong> Son los gastos generales que no se asignan directamente al proyecto, pero que son necesarios para mantener el entorno operativo de la organización.</p>
+            <ul class="list-disc list-inside mt-2 text-gray-600">
+                <li><strong>Infraestructura:</strong> Oficinas, internet, electricidad compartida por múltiples proyectos.</li>
+                <li><strong>Administrativos:</strong> Personal de RRHH, contabilidad, gerencia que apoya varios proyectos.</li>
+                <li><strong>Beneficios:</strong> Prestaciones sociales, seguros médicos para el personal.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Part 2: Configuración del Entorno -->
+    <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-2xl font-semibold text-blue-900 mb-4"><i class="fas fa-tools mr-2"></i>Parte 2: Configuración del Entorno de Trabajo </h2>
+
+        <!-- 2.1 Instalación de Python -->
+        <div class="mb-6">
+            <h3 class="text-xl font-medium text-gray-800">2.1 Instalación de Python</h3>
+            <p class="mt-2 text-gray-600">Descarga e instala Python desde <a href="https://www.python.org/downloads/" class="text-blue-600 hover:underline" target="_blank">python.org</a>. Asegúrate de marcar <em>'Add Python to PATH'</em>.</p>
+            <p class="mt-2 text-gray-600"><strong>Verificación:</strong> Abre una terminal y ejecuta:</p>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-2"><code>python --version</code></pre>
+        </div>
+
+        <!-- 2.2 Entorno Virtual -->
+        <div class="mb-6">
+            <h3 class="text-xl font-medium text-gray-800">2.2 Creación de un Entorno Virtual</h3>
+            <p class="mt-2 text-gray-600">Un entorno virtual evita conflictos entre librerías. Sigue estos pasos:</p>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-2"><code>mkdir curso_estimacion
+cd curso_estimacion
+python -m venv venv
+# Activar (Windows):
+.\venv\Scripts\activate
+# Activar (Mac/Linux):
+source venv/bin/activate</code></pre>
+        </div>
+
+        <!-- 2.3 Instalación de Librerías -->
+        <div>
+            <h3 class="text-xl font-medium text-gray-800">2.3 Instalación de Librerías Necesarias</h3>
+            <p class="mt-2 text-gray-600">Instala las librerías <code>pandas</code> y <code>openpyxl</code> con:</p>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-2"><code>pip install pandas openpyxl</code></pre>
+        </div>
+    </section>
+
+    <!-- Part 3: Actividad Práctica -->
+    <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-2xl font-semibold text-blue-900 mb-4"><i class="fas fa-laptop-code mr-2"></i>Parte 3: Actividad Práctica </h2>
+
+        <!-- Paso 1: Plantilla de Presupuesto -->
+        <div class="mb-6">
+            <h3 class="text-xl font-medium text-gray-800">Paso 1: Crear la Plantilla de Presupuesto en Excel</h3>
+            <p class="mt-2 text-gray-600">Crea un archivo <code>presupuesto_proyecto_v1.xlsx</code> con la siguiente tabla en una hoja llamada <em>CostosDirectos</em>:</p>
+            <table class="w-full border-collapse border border-gray-300 mt-4">
+                <thead class="bg-gray-100">
+                <tr>
+                    <th class="border border-gray-300 p-2">Tarea / Actividad</th>
+                    <th class="border border-gray-300 p-2">Rol Asignado</th>
+                    <th class="border border-gray-300 p-2">Horas Estimadas</th>
+                    <th class="border border-gray-300 p-2">Tarifa por Hora (COP)</th>
+                    <th class="border border-gray-300 p-2">Costo Total (COP)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr><td class="border border-gray-300 p-2">Diseño de la Base de Datos</td><td class="border border-gray-300 p-2">Desarrollador Backend</td><td class="border border-gray-300 p-2">10</td><td class="border border-gray-300 p-2">50000</td><td class="border border-gray-300 p-2"></td></tr>
+                <tr><td class="border border-gray-300 p-2">Creación de API de Usuarios</td><td class="border border-gray-300 p-2">Desarrollador Backend</td><td class="border border-gray-300 p-2">16</td><td class="border border-gray-300 p-2">50000</td><td class="border border-gray-300 p-2"></td></tr>
+                <tr><td class="border border-gray-300 p-2">Diseño de Mockups</td><td class="border border-gray-300 p-2">Diseñador UX/UI</td><td class="border border-gray-300 p-2">8</td><td class="border border-gray-300 p-2">45000</td><td class="border border-gray-300 p-2"></td></tr>
+                <tr><td class="border border-gray-300 p-2">Desarrollo Frontend Login</td><td class="border border-gray-300 p-2">Desarrollador Frontend</td><td class="border border-gray-300 p-2">12</td><td class="border border-gray-300 p-2">50000</td><td class="border border-gray-300 p-2"></td></tr>
+                <tr><td class="border border-gray-300 p-2">Pruebas Funcionales</td><td class="border border-gray-300 p-2">Analista QA</td><td class="border border-gray-300 p-2">8</td><td class="border border-gray-300 p-2">40000</td><td class="border border-gray-300 p-2"></td></tr>
+                </tbody>
+            </table>
+            <p class="mt-4 text-gray-600">Descarga la plantilla:</p>
+            <a href="presupuesto_proyecto_v1.xlsx" class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-2"><i class="fas fa-download mr-2"></i>presupuesto_proyecto_v1.xlsx</a>
+        </div>
+
+        <!-- Paso 2: Script de Python -->
+        <div class="mb-6">
+            <h3 class="text-xl font-medium text-gray-800">Paso 2: Escribir el Script de Python</h3>
+            <p class="mt-2 text-gray-600">Crea un archivo <code>semana1_calculadora.py</code> con el siguiente código:</p>
+            <pre class="language-python"><code># semana1_calculadora.py
+import pandas as pd
+
+# Nombre del archivo de Excel
+archivo_excel = 'presupuesto_proyecto_v1.xlsx'
+nombre_hoja = 'CostosDirectos'
+
+print(f"--- Leyendo el archivo: {archivo_excel} ---")
+
+# Leer el archivo Excel usando pandas
+try:
+    df_costos = pd.read_excel(archivo_excel, sheet_name=nombre_hoja)
+
+    # Mostrar los datos leídos
+    print("\nDatos leídos desde Excel:")
+    print(df_costos)
+
+    # Calcular la columna 'Costo Total (COP)'
+    df_costos['Costo Total (COP)'] = df_costos['Horas Estimadas'] * df_costos['Tarifa por Hora (COP)']
+
+    # Calcular el costo total del proyecto
+    costo_total_proyecto = df_costos['Costo Total (COP)'].sum()
+
+    # Mostrar los resultados
+    print("\n--- Presupuesto Calculado ---")
+    print("\nDetalle de costos por tarea:")
+    print(df_costos)
+
+    print("\n-----------------------------------------------------")
+    print(f"Costo Total Directo del Proyecto: ${costo_total_proyecto:,.2f} COP")
+    print("-----------------------------------------------------")
+
+except FileNotFoundError:
+    print(f"\n¡ERROR! No se encontró el archivo '{archivo_excel}'.")
+    print("Asegúrate de que el archivo esté en la misma carpeta que el script.")
+</code></pre>
+        </div>
+
+        <!-- Paso 3: Ejecutar el Script -->
+        <div class="mb-6">
+            <h3 class="text-xl font-medium text-gray-800">Paso 3: Ejecutar el Script</h3>
+            <p class="mt-2 text-gray-600">Con el entorno virtual activado, ejecuta:</p>
+            <pre class="bg-gray-800 text-white p-4 rounded mt-2"><code>python semana1_calculadora.py</code></pre>
+        </div>
+
+        <!-- Resultados en Tabla -->
+        <div>
+            <h3 class="text-xl font-medium text-gray-800">Resultados del Presupuesto Calculado</h3>
+            <p class="mt-2 text-gray-600">A continuación, se muestra el resultado del script en una tabla organizada y responsiva:</p>
+            <div class="overflow-x-auto mt-4">
+                <table class="w-full border-collapse bg-white shadow-md rounded-lg">
+                    <thead class="bg-blue-900 text-white">
+                    <tr>
+                        <th class="border border-gray-300 p-3 text-left">Tarea / Actividad</th>
+                        <th class="border border-gray-300 p-3 text-left">Rol Asignado</th>
+                        <th class="border border-gray-300 p-3 text-right">Horas Estimadas</th>
+                        <th class="border border-gray-300 p-3 text-right">Tarifa por Hora (COP)</th>
+                        <th class="border border-gray-300 p-3 text-right">Costo Total (COP)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="hover:bg-gray-50">
+                        <td class="border border-gray-300 p-3">Diseño de la Base de Datos</td>
+                        <td class="border border-gray-300 p-3">Desarrollador Backend</td>
+                        <td class="border border-gray-300 p-3 text-right">10</td>
+                        <td class="border border-gray-300 p-3 text-right">50,000</td>
+                        <td class="border border-gray-300 p-3 text-right">500,000.00</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="border border-gray-300 p-3">Creación de API de Usuarios</td>
+                        <td class="border border-gray-300 p-3">Desarrollador Backend</td>
+                        <td class="border border-gray-300 p-3 text-right">16</td>
+                        <td class="border border-gray-300 p-3 text-right">50,000</td>
+                        <td class="border border-gray-300 p-3 text-right">800,000.00</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="border border-gray-300 p-3">Diseño de Mockups</td>
+                        <td class="border border-gray-300 p-3">Diseñador UX/UI</td>
+                        <td class="border border-gray-300 p-3 text-right">8</td>
+                        <td class="border border-gray-300 p-3 text-right">45,000</td>
+                        <td class="border border-gray-300 p-3 text-right">360,000.00</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="border border-gray-300 p-3">Desarrollo Frontend Login</td>
+                        <td class="border border-gray-300 p-3">Desarrollador Frontend</td>
+                        <td class="border border-gray-300 p-3 text-right">12</td>
+                        <td class="border border-gray-300 p-3 text-right">50,000</td>
+                        <td class="border border-gray-300 p-3 text-right">600,000.00</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="border border-gray-300 p-3">Pruebas Funcionales</td>
+                        <td class="border border-gray-300 p-3">Analista QA</td>
+                        <td class="border border-gray-300 p-3 text-right">8</td>
+                        <td class="border border-gray-300 p-3 text-right">40,000</td>
+                        <td class="border border-gray-300 p-3 text-right">320,000.00</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr class="bg-gray-100 font-semibold">
+                        <td colspan="4" class="border border-gray-300 p-3 text-right">Costo Total Directo del Proyecto:</td>
+                        <td class="border border-gray-300 p-3 text-right">$2,580,000.00 COP</td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conclusión y Tarea -->
+    <section class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-semibold text-blue-900 mb-4"><i class="fas fa-check-circle mr-2"></i>Conclusión y Tarea</h2>
+        <p class="text-gray-600"><strong>Resumen:</strong> Hoy aprendimos la importancia de la estimación, diferenciamos costos directos e indirectos, y automatizamos un cálculo de presupuesto con Python y Excel.</p>
+        <p class="mt-2 text-gray-600"><strong>Tarea (Obligatoria):</strong> Según el proyecto de software presentado por su instructor, estimar los costos directos e indirectos, organizarlos en una tabla de Excel y manipular los totales con Python.</p>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer class="bg-blue-900 text-white py-6">
+    <div class="container mx-auto px-4 text-center">
+        <p>© 2025 Curso de Estimación de Software. Arle Morales Ortiz.</p>
+    </div>
+</footer>
+</body>
+</html>
