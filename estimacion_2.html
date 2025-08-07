@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial: Estimación por Puntos de Historia y Velocidad</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <style>
+        pre[class*="language-"] {
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            background: #1e1e1e;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        code[class*="language-"] {
+            font-family: 'Fira Code', monospace;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans leading-normal tracking-normal">
+<!-- Header -->
+<header class="bg-indigo-900 text-white py-8">
+    <div class="container mx-auto px-4">
+        <h1 class="text-4xl font-bold text-center">Estimación por Puntos de Historia y Velocidad</h1>
+        <p class="mt-4 text-lg text-center"><i class="fas fa-bullseye mr-2"></i>Objetivo: Aprender a estimar con puntos de historia, calcular la velocidad del equipo y proyectar fechas de entrega.</p>
+        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Equipo ágil colaborando" class="mt-6 w-full max-w-2xl mx-auto rounded-lg shadow-lg">
+
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="container mx-auto px-4 py-10">
+    <!-- Introducción a Scrum -->
+    <section class="bg-white rounded-lg shadow-lg p-8 mb-10">
+        <h2 class="text-3xl font-semibold text-indigo-900 mb-6"><i class="fas fa-users mr-2"></i>Introducción a Scrum</h2>
+        <p class="text-gray-600 mb-4">Scrum es un marco ágil para gestionar proyectos, especialmente en desarrollo de software. Promueve la colaboración, la entrega incremental y la adaptación al cambio.</p>
+        <ul class="list-disc list-inside mt-3 text-gray-600">
+            <li><strong>Roles:</strong>
+                <ul class="list-circle list-inside ml-6">
+                    <li><strong>Product Owner:</strong> Define la visión del producto y prioriza el backlog.</li>
+                    <li><strong>Scrum Master:</strong> Facilita el proceso, elimina impedimentos y asegura que el equipo siga las prácticas de Scrum.</li>
+                    <li><strong>Equipo de Desarrollo:</strong> Ejecuta el trabajo, autoorganizado y multidisciplinario.</li>
+                </ul>
+            </li>
+            <li><strong>Eventos:</strong>
+                <ul class="list-circle list-inside ml-6">
+                    <li><strong>Sprint:</strong> Iteración de 1-4 semanas para entregar un incremento funcional.</li>
+                    <li><strong>Daily Scrum:</strong> Reunión diaria de 15 minutos para sincronizar el equipo.</li>
+                    <li><strong>Sprint Planning:</strong> Planificación de las tareas del sprint.</li>
+                    <li><strong>Sprint Review:</strong> Demostración del incremento al final del sprint.</li>
+                    <li><strong>Sprint Retrospective:</strong> Reflexión para mejorar procesos.</li>
+                </ul>
+            </li>
+            <li><strong>Artefactos:</strong>
+                <ul class="list-circle list-inside ml-6">
+                    <li><strong>Product Backlog:</strong> Lista priorizada de tareas o historias de usuario.</li>
+                    <li><strong>Sprint Backlog:</strong> Subconjunto del backlog seleccionado para el sprint.</li>
+                    <li><strong>Incremento:</strong> Producto funcional entregado al final del sprint.</li>
+                </ul>
+            </li>
+        </ul>
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Reunión Scrum" class="mt-4 w-full max-w-sm float-right ml-4 rounded-lg shadow">
+
+    </section>
+
+    <!-- Conceptos Clave -->
+    <section class="bg-white rounded-lg shadow-lg p-8 mb-10">
+        <h2 class="text-3xl font-semibold text-indigo-900 mb-6"><i class="fas fa-book-open mr-2"></i>Conceptos Clave</h2>
+
+        <!-- Story Points -->
+        <div class="mb-8">
+            <h3 class="text-2xl font-medium text-gray-800"><i class="fas fa-star mr-2"></i>1. Puntos de Historia (Story Points)</h3>
+            <p class="mt-3 text-gray-600">Los <strong>puntos de historia</strong> miden el <strong>esfuerzo relativo</strong> para completar una historia de usuario, considerando complejidad, esfuerzo y riesgo.</p>
+            <ul class="list-disc list-inside mt-3 text-gray-600">
+                <li><strong>Esfuerzo Relativo:</strong> Compara tareas (e.g., una tarea de 5 puntos es más compleja que una de 1 punto).</li>
+                <li><strong>Escala de Fibonacci:</strong> Usa valores como 1, 2, 3, 5, 8, 13 para reflejar incertidumbre.</li>
+                <li><strong>Definición de "Hecho" (Definition of Done):</strong> Criterios para considerar una historia completa (e.g., codificado, probado, desplegado).</li>
+            </ul>
+        </div>
+
+        <!-- Velocidad del Equipo -->
+        <div class="mb-8">
+            <h3 class="text-2xl font-medium text-gray-800"><i class="fas fa-tachometer-alt mr-2"></i>2. Velocidad del Equipo</h3>
+            <p class="mt-3 text-gray-600">La <strong>velocidad</strong> es el promedio de puntos de historia completados por sprint. Ayuda a planificar y proyectar entregas.</p>
+            <ul class="list-disc list-inside mt-3 text-gray-600">
+                <li><strong>Cálculo:</strong> Promedio de puntos completados en sprints recientes.</li>
+                <li><strong>Proyección:</strong> Estima sprints necesarios para el backlog.</li>
+                <li><strong>Variabilidad:</strong> Puede fluctuar por cambios en el equipo o complejidad.</li>
+            </ul>
+        </div>
+
+        <!-- Burndown Chart -->
+        <div class="mb-8">
+            <h3 class="text-2xl font-medium text-gray-800"><i class="fas fa-chart-line mr-2"></i>3. Burndown Chart</h3>
+            <p class="mt-3 text-gray-600">Un <strong>Burndown Chart</strong> es un gráfico que muestra el progreso del equipo al completar puntos de historia durante un sprint o proyecto. Visualiza los puntos restantes frente al tiempo, ayudando a identificar si el equipo está en camino de cumplir los objetivos.</p>
+            <ul class="list-disc list-inside mt-3 text-gray-600">
+                <li><strong>Eje Y:</strong> Puntos de historia restantes.</li>
+                <li><strong>Eje X:</strong> Tiempo (días o sprints).</li>
+                <li><strong>Línea Ideal:</strong> Representa el ritmo esperado si el trabajo se completa uniformemente.</li>
+                <li><strong>Línea Real:</strong> Muestra el progreso actual, permitiendo detectar desviaciones.</li>
+            </ul>
+            <img src="https://res.cloudinary.com/pym/image/upload/c_scale,f_auto,q_auto,w_1200/v1/articles/2016/release-burndown.jpg" alt="Burndown Chart" class="mt-4 w-full max-w-sm mx-auto rounded-lg shadow">
+
+        </div>
+
+        <!-- Terminología Complementaria -->
+        <div>
+            <h3 class="text-2xl font-medium text-gray-800"><i class="fas fa-info-circle mr-2"></i>4. Terminología Complementaria</h3>
+            <ul class="list-disc list-inside mt-3 text-gray-600">
+                <li><strong>Product Backlog:</strong> Lista priorizada de tareas o historias de usuario.</li>
+                <li><strong>Sprint Backlog:</strong> Tareas seleccionadas para un sprint.</li>
+                <li><strong>Planning Poker:</strong> Técnica colaborativa para asignar puntos de historia.</li>
+                <li><strong>Incremento:</strong> Producto funcional entregado al final del sprint.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Actividad Práctica -->
+    <section class="bg-white rounded-lg shadow-lg p-8 mb-10">
+        <h2 class="text-3xl font-semibold text-indigo-900 mb-6"><i class="fas fa-laptop-code mr-2"></i>Actividad Práctica: Simulación de Velocidad y Proyección</h2>
+        <p class="text-gray-600 mb-4">Usa Python para simular la velocidad de un equipo y proyectar fechas de entrega. Genera un <strong>Burndown Chart</strong> con <code>matplotlib</code>.</p>
+
+        <!-- Paso 1: Configuración -->
+        <div class="mb-8">
+            <h3 class="text-2xl font-medium text-gray-800">Paso 1: Configuración del Entorno</h3>
+            <p class="mt-3 text-gray-600">Crea un entorno virtual e instala las librerías necesarias:</p>
+            <pre class="language-bash"><code>mkdir simulacion_velocidad
+cd simulacion_velocidad
+python -m venv venv
+# Activar (Windows):
+.\venv\Scripts\activate
+# Activar (Mac/Linux):
+source venv/bin/activate
+# Instalar librerías
+pip install pandas matplotlib</code></pre>
+        </div>
+
+        <!-- Paso 2: Script de Python -->
+        <div class="mb-8">
+            <h3 class="text-2xl font-medium text-gray-800">Paso 2: Crear el Script de Simulación</h3>
+            <p class="mt-3 text-gray-600">Crea un archivo <code>simulacion_velocidad.py</code> con el siguiente código:</p>
+            <pre class="language-python"><code># simulacion_velocidad.py
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Datos de entrada: puntos de historia completados por sprint
+historias_por_sprint = [5, 3, 8, 2]  # Ejemplo de 4 sprints
+puntos_restantes = 60  # Puntos de historia en el backlog
+duracion_sprint_dias = 14  # Duración de un sprint en días
+
+# Calcular la velocidad promedio
+velocidad = sum(historias_por_sprint) / len(historias_por_sprint)
+print(f"Velocidad promedio: {velocidad:.2f} puntos de historia por sprint")
+
+# Proyectar sprints requeridos
+sprints_requeridos = puntos_restantes / velocidad
+print(f"Sprints requeridos para completar {puntos_restantes} puntos: {sprints_requeridos:.1f}")
+
+# Proyectar días totales
+dias_totales = sprints_requeridos * duracion_sprint_dias
+print(f"Días estimados: {dias_totales:.0f} días (aproximadamente {dias_totales/7:.1f} semanas)")
+
+# Generar datos para el Burndown Chart
+sprints = list(range(1, len(historias_por_sprint) + 1))
+puntos_acumulados = [puntos_restantes - sum(historias_por_sprint[:i+1]) for i in range(len(historias_por_sprint))]
+puntos_acumulados.insert(0, puntos_restantes)  # Agregar el punto inicial
+sprints.insert(0, 0)  # Agregar sprint inicial
+
+# Crear el Burndown Chart
+plt.figure(figsize=(10, 6))
+plt.plot(sprints, puntos_acumulados, marker='o', linestyle='-', color='b')
+plt.title('Burndown Chart Simulado')
+plt.xlabel('Número de Sprint')
+plt.ylabel('Puntos de Historia Restantes')
+plt.grid(True)
+plt.savefig('burndown_chart.png')
+plt.show()
+
+print("\nGráfico guardado como 'burndown_chart.png'")
+</code></pre>
+            <p class="mt-3 text-gray-600">Descarga el script:</p>
+            <a href="simulacion_velocidad.py" class="inline-block bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 mt-2"><i class="fas fa-download mr-2"></i>simulacion_velocidad.py</a>
+        </div>
+
+        <!-- Paso 3: Ejecutar y Analizar -->
+        <div>
+            <h3 class="text-2xl font-medium text-gray-800">Paso 3: Ejecutar el Script</h3>
+            <p class="mt-3 text-gray-600">Ejecuta el script con:</p>
+            <pre class="language-bash"><code>python simulacion_velocidad.py</code></pre>
+            <p class="mt-3 text-gray-600">Resultado esperado:</p>
+            <pre class="language-text"><code>Velocidad promedio: 4.50 puntos de historia por sprint
+Sprints requeridos para completar 60 puntos: 13.3
+Días estimados: 187 días (aproximadamente 26.7 semanas)
+Gráfico guardado como 'burndown_chart.png'
+</code></pre>
+            <p class="mt-3 text-gray-600">El script genera un Burndown Chart mostrando el progreso simulado.</p>
+        </div>
+    </section>
+
+    <!-- Tarea Práctica -->
+    <section class="bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-3xl font-semibold text-indigo-900 mb-6"><i class="fas fa-tasks mr-2"></i>Tarea Práctica</h2>
+        <p class="text-gray-600">Modifica el script para un proyecto más realista:</p>
+        <ul class="list-disc list-inside mt-3 text-gray-600">
+            <li>Añade más sprints a <code>historias_por_sprint</code> (e.g., [5, 3, 8, 2, 6, 4]).</li>
+            <li>Cambia <code>puntos_restantes</code> (e.g., 100).</li>
+            <li>Ajusta <code>duracion_sprint_dias</code> (e.g., 7 días).</li>
+            <li>Ejecuta y analiza los resultados.</li>
+            <li>(Opcional) Configura un proyecto en <a href="https://www.atlassian.com/software/jira" class="text-indigo-600 hover:underline" target="_blank">Jira</a>, carga el backlog y compara las proyecciones.</li>
+        </ul>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer class="bg-indigo-900 text-white py-6">
+    <div class="container mx-auto px-4 text-center">
+        <p>&copy; 2025 Curso de Estimación Ágil. Arle Morales Ortiz.</p>
+    </div>
+</footer>
+</body>
+</html>
