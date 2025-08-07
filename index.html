@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial Completo: Programación Orientada a Objetos en Python</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&family=Source+Code+Pro:wght@400;600&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        h1, h2, h3 {
+            font-family: 'Roboto Slab', serif;
+        }
+        .code-block {
+            font-family: 'Source Code Pro', monospace;
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-block .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #4f5663;
+            color: #abb2bf;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        .code-block:hover .copy-btn {
+            opacity: 1;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .icon {
+            color: #007bff;
+        }
+
+        /* Estilos para la impresión */
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            header, footer, .copy-btn, #export-btn {
+                display: none !important;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #dee2e6;
+                margin-bottom: 1.5rem;
+                page-break-inside: avoid;
+            }
+            .container {
+                max-width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+<header class="bg-white shadow-md sticky top-0 z-10">
+    <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="text-2xl font-bold text-gray-800"><i class="fas fa-code icon"></i> POO en Python</div>
+        <div class="flex items-center space-x-6">
+            <div class="hidden md:flex space-x-6">
+                <a href="#clases" class="text-gray-600 hover:text-blue-500">Clases</a>
+                <a href="#constructor" class="text-gray-600 hover:text-blue-500">Constructor</a>
+                <a href="#herencia" class="text-gray-600 hover:text-blue-500">Herencia</a>
+                <a href="#encapsulamiento" class="text-gray-600 hover:text-blue-500">Encapsulamiento</a>
+            </div>
+            <button id="export-btn" onclick="exportToPDF()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300">
+                <i class="fas fa-file-pdf mr-2"></i>Exportar a PDF
+            </button>
+        </div>
+    </nav>
+</header>
+
+<div class="container mx-auto px-6 py-12">
+
+    <section class="text-center mb-16">
+        <img src="https://placehold.co/150x150/007bff/ffffff?text=Py" alt="Imagen de Logo de Python" class="mx-auto mb-6 rounded-full">
+        <h1 class="text-5xl font-bold text-gray-800 mb-4">Tutorial de Programación Orientada a Objetos (POO)</h1>
+        <p class="text-xl text-gray-600">Una guía completa para dominar los conceptos fundamentales de la POO en Python.</p>
+    </section>
+
+    <section id="clases" class="card">
+        <h2 class="text-3xl font-bold mb-6 flex items-center"><i class="fas fa-cubes icon mr-3"></i>1. Clases y Objetos: Los Planos y las Casas</h2>
+        <p class="text-lg mb-6">Imagina que quieres construir una casa. Primero, necesitas un <strong>plano</strong> que defina cómo será. En POO, ese plano es una <strong>clase</strong>. Una vez que tienes el plano, puedes construir una o muchas <strong>casas</strong> a partir de él. Cada casa es una <strong>instancia</strong> u <strong>objeto</strong> de esa clase.</p>
+
+        <div class="my-8 p-6 bg-blue-50 rounded-lg text-center">
+            <div class="flex flex-col md:flex-row items-center justify-around">
+                <div class="text-center mb-6 md:mb-0">
+                    <i class="fas fa-drafting-compass text-6xl text-blue-500 mb-3"></i>
+                    <h3 class="text-2xl font-semibold">Clase (El Plano)</h3>
+                    <p>Define propiedades y comportamientos.</p>
+                </div>
+                <i class="fas fa-arrow-right text-4xl text-blue-300 hidden md:block"></i>
+                <i class="fas fa-arrow-down text-4xl text-blue-300 md:hidden mb-4"></i>
+                <div class="flex space-x-4">
+                    <div class="text-center">
+                        <i class="fas fa-home text-6xl text-green-500"></i>
+                        <h3 class="text-xl font-semibold mt-2">Objeto 1</h3>
+                    </div>
+                    <div class="text-center">
+                        <i class="fas fa-building text-6xl text-green-500"></i>
+                        <h3 class="text-xl font-semibold mt-2">Objeto 2</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="text-2xl font-semibold mb-4">Ejemplo en Código:</h3>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+            <pre><code><span style="color: #c678dd;">class</span> <span style="color: #e5c07b;">Carro</span>:
+    <span style="color: #c678dd;">pass</span>
+
+<span style="color: #56b6c2;"># Creamos dos objetos (dos instancias) a partir de la clase Carro</span>
+mi_carro = Carro()
+otro_carro = Carro()
+
+<span style="color: #c678dd;">print</span>(mi_carro)
+<span style="color: #c678dd;">print</span>(otro_carro)</code></pre>
+        </div>
+    </section>
+
+    <section id="constructor" class="card">
+        <h2 class="text-3xl font-bold mb-6 flex items-center"><i class="fas fa-cogs icon mr-3"></i>2. El Constructor (`__init__`)</h2>
+        <p class="text-lg mb-6">Cuando creamos un objeto, a menudo queremos darle un estado inicial. Para eso usamos un método especial llamado <code>__init__</code>, que es el <strong>constructor</strong> de la clase. Se ejecuta automáticamente cada vez que se crea un nuevo objeto.</p>
+        <h3 class="text-2xl font-semibold mb-4">Ejemplo en Código:</h3>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+            <pre><code><span style="color: #c678dd;">class</span> <span style="color: #e5c07b;">Carro</span>:
+    <span style="color: #c678dd;">def</span> <span style="color: #61afef;">__init__</span>(<span style="color: #e06c75;">self</span>, marca, modelo):
+        <span style="color: #5c6370;"># Estas son las propiedades o atributos</span>
+        <span style="color: #e06c75;">self</span>.marca = marca
+        <span style="color: #e06c75;">self</span>.modelo = modelo
+
+<span style="color: #56b6c2;">mi_mazda = Carro("Mazda", "3")</span>
+<span style="color: #c678dd;">print</span>(<span style="color: #98c379;">f"Tengo un {mi_mazda.marca} modelo {mi_mazda.modelo}"</span>)</code></pre>
+        </div>
+        <h3 class="text-2xl font-semibold my-6">Sobrecarga de Constructores</h3>
+        <p class="text-lg mb-6">Python no soporta la sobrecarga de constructores como otros lenguajes, pero puedes lograr un efecto similar usando <strong>parámetros con valores por defecto.</strong></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+            <pre><code><span style="color: #c678dd;">class</span> <span style="color: #e5c07b;">Persona</span>:
+    <span style="color: #c678dd;">def</span> <span style="color: #61afef;">__init__</span>(<span style="color: #e06c75;">self</span>, nombre, edad=0): <span style="color: #5c6370;"># edad tiene un valor por defecto</span>
+        <span style="color: #e06c75;">self</span>.nombre = nombre
+        <span style="color: #e06c75;">self</span>.edad = edad
+
+<span style="color: #56b6c2;">adulto = Persona("Juan", 30)</span>
+<span style="color: #56b6c2;">niño = Persona("Pedrito")</span> <span style="color: #5c6370;"># La edad será 0</span></code></pre>
+        </div>
+    </section>
+
+    <section id="propiedades" class="card">
+        <h2 class="text-3xl font-bold mb-6 flex items-center"><i class="fas fa-list-alt icon mr-3"></i>3. Propiedades y Métodos</h2>
+        <ul class="list-disc list-inside text-lg space-y-4 mb-6">
+            <li><strong>Propiedades (o atributos)</strong>: Son las características o datos que pertenecen a un objeto (como `marca` y `modelo`).</li>
+            <li><strong>Métodos</strong>: Son las acciones o comportamientos que un objeto puede realizar (como `encender()` o `frenar()`).</li>
+        </ul>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+            <pre><code><span style="color: #c678dd;">class</span> <span style="color: #e5c07b;">Carro</span>:
+    <span style="color: #c678dd;">def</span> <span style="color: #61afef;">__init__</span>(<span style="color: #e06c75;">self</span>, marca, modelo):
+        <span style="color: #e06c75;">self</span>.marca = marca
+        <span style="color: #e06c75;">self</span>.modelo = modelo
+        <span style="color: #e06c75;">self</span>.encendido = <span style="color: #d19a66;">False</span>
+
+    <span style="color: #5c6370;"># Método para encender el carro</span>
+    <span style="color: #c678dd;">def</span> <span style="color: #61afef;">encender</span>(<span style="color: #e06c75;">self</span>):
+        <span style="color: #e06c75;">self</span>.encendido = <span style="color: #d19a66;">True</span>
+        <span style="color: #c678dd;">print</span>(<span style="color: #98c379;">"El carro ha sido encendido."</span>)
+
+<span style="color: #56b6c2;">mi_carro = Carro("Toyota", "Prado")</span>
+<span style="color: #56b6c2;">mi_carro.encender()</span></code></pre>
+        </div>
+    </section>
+
+    <section id="encapsulamiento" class="card">
+        <h2 class="text-3xl font-bold mb-6 flex items-center"><i class="fas fa-shield-alt icon mr-3"></i>4. Encapsulamiento</h2>
+        <p class="text-lg mb-6">Es la idea de ocultar los detalles internos de un objeto y exponer solo lo que es necesario. En Python, se usan convenciones con guiones bajos para indicar la visibilidad:</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-center">
+            <div class="p-6 bg-gray-100 rounded-lg">
+                <h3 class="text-xl font-semibold mb-2"><code>_protegido</code> (Un guion bajo)</h3>
+                <p>Indica que no debería ser modificado fuera de la clase o sus subclases. Es una advertencia.</p>
+            </div>
+            <div class="p-6 bg-gray-100 rounded-lg">
+                <h3 class="text-xl font-semibold mb-2"><code>__privado</code> (Doble guion bajo)</h3>
+                <p>Indica que es "privado". Python cambia el nombre para hacerlo más difícil de acceder desde fuera.</p>
+            </div>
+        </div>
+        <div class="code-block mt-6">
+            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+            <pre><code><span style="color: #c678dd;">class</span> <span style="color: #e5c07b;">CuentaBancaria</span>:
+    <span style="color: #c678dd;">def</span> <span style="color: #61afef;">__init__</span>(<span style="color: #e06c75;">self</span>, saldo_inicial):
+        <span style="color: #e06c75;">self</span>.__saldo = saldo_inicial <span style="color: #5c6370;"># Atributo "privado"</span>
+
+    <span style="color: #c678dd;">def</span> <span style="color: #61afef;">ver_saldo</span>(<span style="color: #e06c75;">self</span>):
+        <span style="color: #c678dd;">return</span> <span style="color: #e06c75;">self</span>.__saldo
+
+<span style="color: #56b6c2;">mi_cuenta = CuentaBancaria(1000)</span>
+<span style="color: #c678dd;">print</span>(mi_cuenta.ver_saldo()) <span style="color: #5c6370;"># Forma correcta de acceder</span>
+<span style="color: #5c6370;"># print(mi_cuenta.__saldo) # Esto dará un error</span></code></pre>
+        </div>
+    </section>
+
+    <section id="herencia" class="card">
+        <h2 class="text-3xl font-bold mb-6 flex items-center"><i class="fas fa-sitemap icon mr-3"></i>5. Herencia</h2>
+        <p class="text-lg mb-6">La herencia permite que una clase (<strong>hija</strong>) herede las propiedades y métodos de otra clase (<strong>padre</strong>). Esto es genial para reutilizar código y crear jerarquías lógicas.</p>
+
+        <div class="my-8 p-6 bg-blue-50 rounded-lg text-center">
+            <div class="p-4 bg-blue-600 text-white rounded-lg inline-block mb-4 shadow-lg">
+                <h3 class="font-bold text-xl"><i class="fas fa-paw"></i> Animal (Clase Padre)</h3>
+            </div>
+            <div class="flex justify-center">
+                <div class="border-l-2 border-blue-300 h-8 w-px"></div>
+            </div>
+            <div class="w-full border-t-2 border-blue-300"></div>
+            <div class="flex justify-around">
+                <div class="w-1/2 border-r-2 border-blue-300">
+                    <div class="border-t-2 border-blue-300 w-1/2 mx-auto"></div>
+                    <div class="border-l-2 border-blue-300 h-8 mx-auto w-px"></div>
+                </div>
+                <div class="w-1/2">
+                    <div class="border-t-2 border-blue-300 w-1/2 mx-auto"></div>
+                    <div class="border-l-2 border-blue-300 h-8 mx-auto w-px"></div>
+                </div>
+            </div>
+            <div class="flex justify-around mt-0">
+                <div class="p-4 bg-blue-400 text-white rounded-lg inline-block shadow-md">
+                    <h3 class="font-bold"><i class="fas fa-dog"></i> Perro (Clase Hija)</h3>
+                </div>
+                <div class="p-4 bg-blue-400 text-white rounded-lg inline-block shadow-md">
+                    <h3 class="font-bold"><i class="fas fa-cat"></i> Gato (Clase Hija)</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+            <pre><code><span style="color: #c678dd;">class</span> <span style="color: #e5c07b;">Animal</span>:
+    <span style="color: #c678dd;">def</span> <span style="color: #61afef;">hacer_sonido</span>(<span style="color: #e06c75;">self</span>):
+        <span style="color: #c678dd;">print</span>(<span style="color: #98c379;">"Sonido genérico"</span>)
+
+<span style="color: #c678dd;">class</span> <span style="color: #e5c07b;">Perro</span>(<span style="color: #e5c07b;">Animal</span>): <span style="color: #5c6370;"># Perro hereda de Animal</span>
+    <span style="color: #c678dd;">def</span> <span style="color: #61afef;">hacer_sonido</span>(<span style="color: #e06c75;">self</span>): <span style="color: #5c6370;"># Sobrescribe el método del padre</span>
+        <span style="color: #c678dd;">print</span>(<span style="color: #98c379;">"¡Guau!"</span>)
+
+<span style="color: #56b6c2;">mi_perro = Perro()</span>
+<span style="color: #56b6c2;">mi_perro.hacer_sonido()</span> <span style="color: #5c6370;"># Imprimirá "¡Guau!"</span></code></pre>
+        </div>
+    </section>
+
+    <section id="otros" class="card">
+        <h2 class="text-3xl font-bold mb-6 flex items-center"><i class="fas fa-star icon mr-3"></i>6. Otros Conceptos Importantes</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <h3 class="text-2xl font-semibold mb-4">Métodos Estáticos</h3>
+                <p class="text-lg mb-4">Un método que pertenece a la clase, pero no depende de ninguna instancia. Se definen con <code>@staticmethod</code>.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    <pre><code><span style="color: #c678dd;">class</span> <span style="color: #e5c07b;">Calculadora</span>:
+    <span style="color: #61afef;">@staticmethod</span>
+    <span style="color: #c678dd;">def</span> <span style="color: #61afef;">sumar</span>(a, b):
+        <span style="color: #c678dd;">return</span> a + b
+
+<span style="color: #56b6c2;">resultado = Calculadora.sumar(5, 10)</span></code></pre>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-2xl font-semibold mb-4">Método `__str__` (toString)</h3>
+                <p class="text-lg mb-4">Define una representación legible para un objeto. Es lo que se muestra cuando usas <code>print()</code>.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    <pre><code><span style="color: #c678dd;">class</span> <span style="color: #e5c07b;">Libro</span>:
+    <span style="color: #c678dd;">def</span> <span style="color: #61afef;">__init__</span>(<span style="color: #e06c75;">self</span>, titulo):
+        <span style="color: #e06c75;">self</span>.titulo = titulo
+
+    <span style="color: #c678dd;">def</span> <span style="color: #61afef;">__str__</span>(<span style="color: #e06c75;">self</span>):
+        <span style="color: #c678dd;">return</span> <span style="color: #e06c75;">self</span>.titulo
+
+<span style="color: #56b6c2;">mi_libro = Libro("El Quijote")</span>
+<span style="color: #c678dd;">print</span>(mi_libro) <span style="color: #5c6370;"># Imprime "El Quijote"</span></code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<footer class="bg-gray-800 text-white mt-12">
+    <div class="container mx-auto px-6 py-8 text-center">
+        <p>&copy; 2025 Tutorial de POO en Python. Todos los derechos reservados.</p>
+        <p class="text-gray-400">Creado con HTML, Tailwind CSS y mucho <i class="fas fa-heart text-red-500"></i>.</p>
+    </div>
+</footer>
+
+<script>
+    function copyCode(button) {
+        const pre = button.parentElement.querySelector('pre');
+        const text = pre.innerText;
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            button.innerText = 'Copiado!';
+            setTimeout(() => {
+                button.innerText = 'Copiar';
+            }, 2000);
+        } catch (err) {
+            console.error('Error al copiar el código: ', err);
+        }
+        document.body.removeChild(textArea);
+    }
+
+    function exportToPDF() {
+        window.print();
+    }
+</script>
+</body>
+</html>
