@@ -1,0 +1,988 @@
+<!doctype html>
+<html lang="es" data-theme="auto">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Tutorial · Técnicas de Estimación Ágil y Herramientas Modernas</title>
+    <meta name="description" content="Tutorial paso a paso 2025: qué es Planning Poker, cómo aplicarlo en remoto con Miro/Trello, IA para estimaciones iniciales e integración en ciclos ágiles. Incluye simulador, plantillas y calculadora de costos en USD." />
+    <style>
+        /* ======== Diseño base ======== */
+        :root{
+            /* Paleta (ajústala según tu branding) */
+            --primary:#0ea5e9;    /* Azul */
+            --secondary:#7c3aed;  /* Violeta */
+            --accent:#f59e0b;     /* Ámbar */
+            --success:#10b981;
+            --danger:#ef4444;
+
+            /* Light */
+            --bg:#f8fafc;
+            --surface:#ffffff;
+            --text:#0f172a;
+            --muted:#64748b;
+            --border:#e2e8f0;
+            --ring:#93c5fd;
+            --shadow:0 10px 30px rgba(2,6,23,.08);
+            --footer-bg: #302E81;  /* azul footer */
+            --footer-text: #ffffff;
+
+            --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+            "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
+            "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            --radius:12px;
+            --space-1:.25rem; --space-2:.5rem; --space-3:.75rem; --space-4:1rem;
+            --space-6:1.5rem; --space-8:2rem; --space-10:2.5rem; --space-12:3rem;
+            --maxw:1200px;
+        }
+        /* Dark (forzado con toggle) */
+        html[data-theme="dark"]{
+            --bg:#0b1220;
+            --surface:#0f172a;
+            --text:#e5e7eb;
+            --muted:#94a3b8;
+            --border:#1f2937;
+            --ring:#60a5fa;
+            --shadow:0 10px 30px rgba(0,0,0,.6);
+        }
+        /* Auto: respeta el SO */
+        @media (prefers-color-scheme: dark){
+            html[data-theme="auto"]{
+                --bg:#0b1220; --surface:#0f172a; --text:#e5e7eb; --muted:#94a3b8;
+                --border:#1f2937; --ring:#60a5fa; --shadow:0 10px 30px rgba(0,0,0,.6);
+            }
+        }
+
+        html,body{height:100%}
+        body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-sans);
+            line-height:1.6;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;}
+        .container{width:min(var(--maxw),100% - 2rem);background:var(--bg);color:var(--text);margin-inline:auto}
+
+        /* Accesibilidad */
+        :focus-visible{outline:3px solid var(--ring);outline-offset:2px;border-radius:8px}
+        .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+        .skip-link:focus{position:fixed;left:1rem;top:1rem;width:auto;height:auto;padding:.5rem .75rem;background:var(--surface);z-index:9999;border-radius:8px;box-shadow:var(--shadow)}
+
+        /* Header */
+        header{position:sticky;top:0;background:color-mix(in oklab, var(--surface) 70%, transparent);
+            backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--border);z-index:50}
+        .nav{display:flex;align-items:center;gap:var(--space-6);padding:var(--space-3) 0}
+        .brand{display:flex;align-items:center;gap:.75rem;font-weight:800}
+        .brand-logo{width:36px;height:36px;border-radius:9px;background:
+                radial-gradient(120% 120% at 0% 0%, var(--secondary), transparent 60%),
+                radial-gradient(120% 120% at 100% 0%, var(--primary), transparent 60%),
+                radial-gradient(140% 140% at 100% 100%, var(--accent), transparent 50%),
+                linear-gradient(180deg, #111827, #0f172a);
+            box-shadow:inset 0 0 0 2px rgba(255,255,255,.06), var(--shadow);}
+        .nav-links{display:flex;gap:.25rem;flex-wrap:wrap}
+        .nav-links a{text-decoration:none;color:var(--text);opacity:.92;padding:.5rem .6rem;border-radius:8px}
+        .nav-links a:hover{background:var(--surface);box-shadow:var(--shadow)}
+        .nav-cta{margin-left:auto;display:flex;gap:.5rem;align-items:center}
+        .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.6rem .9rem;border-radius:10px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-weight:700}
+        .btn.primary{background:linear-gradient(180deg, var(--primary), #0284c7);color:#fff;border:0}
+        .btn.ghost{background:transparent;border:1px solid var(--border)}
+        .btn.small{padding:.45rem .7rem;font-size:.9rem}
+        .menu-toggle{display:none}
+        @media (max-width: 880px){
+            .nav{flex-wrap:wrap}
+            .nav-links{display:none;width:100%}
+            .nav-links.open{display:flex}
+            .menu-toggle{display:inline-flex}
+            .nav-cta{margin-left:0}
+        }
+        /* Progreso lectura */
+        .progress{position:sticky;top:60px;height:4px;background:linear-gradient(90deg,var(--primary),var(--secondary));width:0;z-index:40;border-bottom-left-radius:2px;border-bottom-right-radius:2px}
+
+        /* Tipografía y componentes */
+        h1{font-size:clamp(1.6rem, 3vw + 1rem, 3rem);line-height:1.1;margin:0 0 var(--space-4)}
+        h2{font-size:clamp(1.25rem,1.4vw + .9rem,2rem);margin:var(--space-8) 0 var(--space-3)}
+        h3{font-size:1.12rem;margin:var(--space-6) 0 var(--space-2)}
+        p{margin:0 0 var(--space-4)}
+        .kicker{font-weight:800;letter-spacing:.12em;color:var(--secondary);text-transform:uppercase}
+        .lead{font-size:1.125rem;color:var(--muted)}
+        .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:var(--space-6)}
+        .pill{display:inline-flex;align-items:center;gap:.5rem;padding:.25rem .6rem;border-radius:999px;border:1px solid var(--border);background:var(--surface);font-size:.9rem}
+        .tag{font-size:.8rem;background:rgba(14,165,233,.12);border:1px solid rgba(14,165,233,.3);padding:.2rem .5rem;border-radius:6px}
+        .grid{display:grid;gap:var(--space-6)}
+        .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+        .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+        @media (max-width: 960px){.grid-2,.grid-3{grid-template-columns:1fr}}
+        .toc ol{margin:0;padding-left:1.25rem}
+        .toc a{color:var(--text);text-decoration:none}
+        .toc a:hover{text-decoration:underline}
+        pre{position:relative;background:#0f172a;color:#e5e7eb;border-radius:12px;padding:1rem 1.25rem;overflow:auto;border:1px solid #1f2937}
+        code{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,"Liberation Mono","Courier New",monospace}
+        .copy-btn{position:absolute;top:.5rem;right:.5rem;border:1px solid #334155;border-radius:8px;background:#111827;color:#e5e7eb;padding:.25rem .5rem;cursor:pointer}
+
+        /* Hero */
+        .hero{padding:var(--space-10) 0 var(--space-8);
+            background:
+                    radial-gradient(80rem 30rem at 10% 0%, rgba(14,165,233,.12), transparent 60%),
+                    radial-gradient(70rem 22rem at 90% 0%, rgba(124,58,237,.12), transparent 50%);
+            border-bottom:1px solid var(--border)}
+        .hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:var(--space-8);align-items:center}
+        @media (max-width: 960px){.hero-grid{grid-template-columns:1fr}}
+
+        /* Listas, callouts, stepper */
+        .checklist li{margin-bottom:.5rem}
+        .callout{display:grid;grid-template-columns:24px 1fr;gap:.75rem;align-items:flex-start;border:1px dashed var(--border);border-radius:12px;padding:1rem;background:linear-gradient(180deg, rgba(14,165,233,.06), rgba(124,58,237,.06))}
+        .icon{width:24px;height:24px;flex:none}
+        .muted{color:var(--muted)}
+        .kbd{font-family:inherit;padding:.1rem .35rem;border:1px solid var(--border);border-bottom-width:3px;border-radius:6px;background:var(--surface)}
+        .stepper{display:grid;gap:1rem}
+        .step{display:grid;grid-template-columns:48px 1fr;gap:1rem;align-items:start}
+        .badge{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;font-weight:900;color:#fff;background:linear-gradient(180deg,var(--secondary),#4f46e5);box-shadow:var(--shadow)}
+
+        /* Planning Poker UI */
+        .deck{display:flex;flex-wrap:wrap;gap:.5rem}
+        .card-pp{width:60px;height:84px;border-radius:10px;border:1px solid var(--border);background:var(--surface);display:grid;place-items:center;font-weight:800;cursor:pointer;box-shadow:var(--shadow)}
+        .card-pp.selected{outline:3px solid var(--primary)}
+        .avatar{width:32px;height:32px;border-radius:999px;background:linear-gradient(135deg,var(--primary),var(--secondary));display:inline-flex;align-items:center;justify-content:center;color:white;font-weight:700}
+        .vote{display:inline-block;padding:.25rem .5rem;border-radius:6px;border:1px solid var(--border);background:var(--surface)}
+
+        /* Tabla, stats y botones */
+        table{width:100%;border-collapse:collapse}
+        th,td{border-bottom:1px solid var(--border);padding:.6rem;text-align:left}
+        tfoot td{font-weight:700}
+        .result{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-4)}
+        @media (max-width: 880px){.result{grid-template-columns:1fr 1fr}}
+        .stat{border:1px solid var(--border);border-radius:10px;padding:1rem;background:var(--surface);text-align:center}
+        .stat .label{color:var(--muted);font-size:.9rem}
+        .stat .value{font-weight:800;font-size:1.25rem}
+
+        /* Footer & utilidades */
+        footer{margin:var(--space-12) 0 var(--space-8);color:var(--muted)}
+        .to-top{position:fixed;inset:auto 1rem 1rem auto;z-index:40;display:none}
+        .to-top.show{display:block}
+        .container2{
+            margin: 0;
+            padding: 1.25rem 0;
+            background: var(--footer-bg);
+            color: var(--footer-text);
+            text-align: center;
+        }
+
+        /* Animaciones suaves */
+        @media (prefers-reduced-motion: no-preference){
+            .btn,.card,.card-pp{transition:transform .15s ease, box-shadow .2s ease, background .2s ease}
+            .btn:hover{transform:translateY(-1px)}
+            .card:hover,.card-pp:hover{transform:translateY(-2px)}
+        }
+
+    </style>
+</head>
+<body>
+<a href="#contenido" class="skip-link">Saltar al contenido principal</a>
+<header>
+    <div class="container nav" role="navigation" aria-label="Principal">
+        <div class="brand">
+            <div class="brand-logo" aria-hidden="true"></div>
+            <span>Técnicas de Estimación Ágil</span>
+            <span class="pill" title="Guía 2025">2025</span>
+        </div>
+        <button class="btn small menu-toggle" aria-expanded="false" aria-controls="menu">Menú</button>
+        <nav id="menu" class="nav-links" aria-label="Secciones">
+            <a href="#teoria">Teoría</a>
+            <a href="#que-es-pp">¿Qué es Planning Poker?</a>
+            <a href="#pasos">Paso a paso</a>
+            <a href="#planning-poker">Planning Poker</a>
+            <a href="#ia">IA en estimaciones</a>
+            <a href="#integracion">Integración</a>
+            <a href="#practica">Práctica</a>
+            <a href="#tarea">Tarea</a>
+            <a href="#aplicacion">Costos (USD)</a>
+            <a href="#faq">FAQ</a>
+        </nav>
+        <div class="nav-cta">
+            <button id="themeToggle" class="btn ghost" aria-pressed="false" title="Cambiar tema claro/oscuro/auto">🌓 Tema</button>
+            <a class="btn primary" href="#pasos">Empezar tutorial</a>
+        </div>
+    </div>
+    <div class="progress" id="progress"></div>
+</header>
+
+<main id="contenido">
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container hero-grid">
+            <div>
+                <div class="kicker">Tutorial paso a paso • Remoto/Híbrido • USD</div>
+                <h1>Técnicas de Estimación Ágil y Herramientas Modernas</h1>
+                <p class="lead">
+                    Aprende qué es <strong>Planning Poker</strong>, estimar con <strong>IA</strong> como apoyo,
+                    e integrar las estimaciones en <strong>ciclos ágiles</strong> en 2025. Incluye simulador y calculadora de costos en <strong>USD</strong>.
+                </p>
+                <div class="legend" style="margin-top:var(--space-4)">
+                    <span class="pill">♟ Scrum</span>
+                    <span class="pill">🧮 Story Points</span>
+                    <span class="pill">🧠 IA asistida</span>
+                    <span class="pill">🌐 Híbrido/Remoto</span>
+                    <span class="pill">$ USD</span>
+                </div>
+            </div>
+            <!-- Ilustración SVG -->
+            <div class="card" aria-label="Ilustración conceptual">
+                <svg viewBox="0 0 600 360" role="img" aria-labelledby="alt-hero" width="100%" height="auto">
+                    <title id="alt-hero">Cartas de Planning Poker, ciclo ágil y cerebro IA</title>
+                    <defs>
+                        <linearGradient id="g1" x1="0" x2="1">
+                            <stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#7c3aed"/>
+                        </linearGradient>
+                        <linearGradient id="g2" x1="0" x2="1">
+                            <stop offset="0" stop-color="#f59e0b"/><stop offset="1" stop-color="#10b981"/>
+                        </linearGradient>
+                        <filter id="blur"><feGaussianBlur stdDeviation="12"/></filter>
+                    </defs>
+                    <rect width="600" height="360" fill="#0b1220" rx="14"/>
+                    <circle cx="520" cy="60" r="60" fill="url(#g1)" filter="url(#blur)" opacity=".5"></circle>
+                    <g transform="translate(40,40)">
+                        <g transform="translate(0,0)"><rect x="0" y="0" width="90" height="130" rx="12" fill="#fff"/><text x="45" y="75" text-anchor="middle" font-family="sans-serif" font-size="36" fill="#0f172a">5</text></g>
+                        <g transform="translate(24,18) rotate(10)"><rect x="0" y="0" width="90" height="130" rx="12" fill="#fff"/><text x="45" y="75" text-anchor="middle" font-family="sans-serif" font-size="36" fill="#0f172a">8</text></g>
+                        <g transform="translate(48,36) rotate(18)"><rect x="0" y="0" width="90" height="130" rx="12" fill="#fff"/><text x="45" y="75" text-anchor="middle" font-family="sans-serif" font-size="36" fill="#0f172a">13</text></g>
+                        <g transform="translate(190,10)">
+                            <circle cx="120" cy="55" r="45" fill="none" stroke="url(#g2)" stroke-width="10"/>
+                            <path d="M160,55 l30,0 l-10,-10 m10,10 l-10,10" fill="none" stroke="#f59e0b" stroke-width="6" stroke-linecap="round"/>
+                            <text x="120" y="60" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#e5e7eb">Sprint</text>
+                        </g>
+                        <g transform="translate(380,0)">
+                            <path d="M40,60 c0,-25 20,-45 45,-45 s45,20 45,45 c0,25 -20,45 -45,45 s-45,-20 -45,-45 z" fill="url(#g1)" opacity=".9"/>
+                            <circle cx="65" cy="45" r="4" fill="#111827"/><circle cx="95" cy="45" r="4" fill="#111827"/>
+                            <path d="M65,70 q25,15 50,0" stroke="#111827" stroke-width="4" fill="none" stroke-linecap="round"/>
+                            <text x="65" y="120" font-family="sans-serif" font-size="12" fill="#e5e7eb">IA</text>
+                        </g>
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- TOC -->
+    <section class="container card toc" aria-labelledby="toc-title" style="margin-top:var(--space-8)">
+        <h2 id="toc-title">Mapa del contenido</h2>
+        <ol>
+            <li><a href="#teoria">Teoría esencial (Story Points & velocidad)</a></li>
+            <li><a href="#que-es-pp">¿Qué es Planning Poker?</a></li>
+            <li><a href="#pasos">Tutorial paso a paso</a></li>
+            <li><a href="#planning-poker">Mecánica y simulador de Planning Poker</a></li>
+            <li><a href="#ia">Uso de IA para estimaciones iniciales</a></li>
+            <li><a href="#integracion">Integración en ciclos ágiles</a></li>
+            <li><a href="#practica">Práctica guiada</a></li>
+            <li><a href="#tarea">Tarea (GitHub + Google Sheets)</a></li>
+            <li><a href="#aplicacion">Aplicación: costos en USD con Python</a></li>
+            <li><a href="#faq">Preguntas frecuentes</a></li>
+        </ol>
+    </section>
+
+    <!-- TEORÍA -->
+    <section id="teoria" class="container">
+        <h2>Teoría esencial: puntos de historia y velocidad</h2>
+        <div class="grid grid-2">
+            <div class="card">
+                <h3>De horas a <em>Story Points</em></h3>
+                <p>Los <strong>story points (SP)</strong> representan <em>tamaño relativo</em> combinando esfuerzo, complejidad e incertidumbre, en lugar de horas exactas. Facilitan comparar y priorizar sin caer en falsas precisiones.</p>
+                <ul class="checklist">
+                    <li>Secuencia sugerida: <strong>0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100</strong>.</li>
+                    <li>“?” = falta de claridad; “☕” = pausa.</li>
+                    <li><strong>Velocidad</strong> = SP completados por sprint (p. ej., 28 SP/sprint).</li>
+                    <li>Usa una historia “ancla” (p. ej., 5 SP) para comparar el resto.</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Buenas prácticas</h3>
+                <ul class="checklist">
+                    <li>Refina el backlog y aclara criterios de aceptación (<em>DoR</em>).</li>
+                    <li>Estima en equipo; documenta suposiciones.</li>
+                    <li>Timebox por historia: 2–5 minutos.</li>
+                    <li>Conecta estimaciones con datos históricos y retroalimentación.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="card callout" style="margin-top:var(--space-6)">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2Zm-1 15-5-5 1.5-1.5L11 13l5.5-5.5L18 9l-7 8Z"/></svg>
+            <div><strong>Meta:</strong> consistencia y aprendizaje, no “acertar horas”. Ajusta tus SP con la experiencia del equipo.</div>
+        </div>
+    </section>
+
+    <!-- ¿QUÉ ES PLANNING POKER? -->
+    <section id="que-es-pp" class="container">
+        <h2>¿Qué es Planning Poker?</h2>
+        <div class="grid grid-2">
+            <div class="card">
+                <h3>Definición</h3>
+                <p><strong>Planning Poker</strong> es una técnica colaborativa para estimar historias de usuario usando cartas con valores (Fibonacci). Cada integrante elige su carta en privado; luego se revelan todas a la vez, se discuten diferencias y se llega a consenso.</p>
+                <h3>Beneficios</h3>
+                <ul class="checklist">
+                    <li>Evita sesgos de anclaje e influencia (elección privada).</li>
+                    <li>Fomenta la conversación sobre riesgos y supuestos.</li>
+                    <li>Rápido y fácil de aplicar en remoto o presencial.</li>
+                </ul>
+                <h3>Cuándo usarlo</h3>
+                <ul class="checklist">
+                    <li>Refinamiento de backlog y planificación de sprint.</li>
+                    <li>Historias con incertidumbre moderada.</li>
+                    <li>Para alinear expectativas de negocio/tecnología.</li>
+                </ul>
+            </div>
+            <div class="card" aria-label="Diagrama ilustrativo">
+                <svg viewBox="0 0 640 360" width="100%" height="auto" role="img" aria-labelledby="pp-diag">
+                    <title id="pp-diag">Diagrama de Planning Poker</title>
+                    <rect width="640" height="360" rx="14" fill="url(#bg-grad)"></rect>
+                    <defs>
+                        <linearGradient id="bg-grad" x1="0" x2="1">
+                            <stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#7c3aed"/>
+                        </linearGradient>
+                    </defs>
+                    <g transform="translate(24,24)">
+                        <rect x="0" y="0" width="280" height="140" rx="12" fill="#fff"/>
+                        <text x="18" y="34" font-size="16" font-family="sans-serif" fill="#0f172a">Historia: “Procesar CSV de ventas”</text>
+                        <text x="18" y="64" font-size="13" font-family="sans-serif" fill="#334155">Criterios: limpiar datos, top 10, exportar reporte</text>
+                        <g transform="translate(320,0)">
+                            <rect x="0" y="0" width="280" height="140" rx="12" fill="#fff"/>
+                            <text x="18" y="34" font-size="16" font-family="sans-serif" fill="#0f172a">Votación privada</text>
+                            <text x="18" y="66" font-size="28" font-family="sans-serif" fill="#0f172a">5 • 8 • 13 • 8</text>
+                        </g>
+                        <g transform="translate(0,180)">
+                            <rect x="0" y="0" width="280" height="140" rx="12" fill="#fff"/>
+                            <text x="18" y="34" font-size="16" font-family="sans-serif" fill="#0f172a">Revelar y discutir</text>
+                            <text x="18" y="66" font-size="13" font-family="sans-serif" fill="#334155">Outliers explican; ajustar supuestos</text>
+                        </g>
+                        <g transform="translate(320,180)">
+                            <rect x="0" y="0" width="280" height="140" rx="12" fill="#fff"/>
+                            <text x="18" y="34" font-size="16" font-family="sans-serif" fill="#0f172a">Consenso</text>
+                            <text x="18" y="66" font-size="28" font-family="sans-serif" fill="#0f172a">= 8 SP</text>
+                        </g>
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- PASO A PASO -->
+    <section id="pasos" class="container">
+        <h2>Tutorial paso a paso</h2>
+        <div class="card stepper">
+            <div class="step">
+                <div class="badge">1</div>
+                <div>
+                    <h3>Prepara el backlog</h3>
+                    <ul class="checklist">
+                        <li>Define objetivos del sprint y criterios de “Listo” (<em>DoR</em>).</li>
+                        <li>Escribe historias cortas con criterios verificables.</li>
+                        <li>Elige una historia “ancla” (p. ej., 5 SP) para comparar.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="step">
+                <div class="badge">2</div>
+                <div>
+                    <h3>Configura el tablero (Miro/Trello)</h3>
+                    <ul class="checklist">
+                        <li><strong>Miro:</strong> zona por historia + sticky notes para supuestos.</li>
+                        <li><strong>Trello:</strong> tarjetas por historia + checklist de criterios.</li>
+                        <li>Agrega enlaces y documentación que necesite el equipo.</li>
+                    </ul>
+                    <p class="muted">Las marcas Miro y Trello pertenecen a sus titulares; usa cualquier herramienta equivalente.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="badge">3</div>
+                <div>
+                    <h3>Corre la sesión de Planning Poker</h3>
+                    <ul class="checklist">
+                        <li>Timebox 2–5 min por historia. Cada persona elige su carta en privado.</li>
+                        <li>Revela simultáneamente; pide a extremos (alto/bajo) que expliquen.</li>
+                        <li>Ajusta historia o divídela si hay demasiada incertidumbre.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="step">
+                <div class="badge">4</div>
+                <div>
+                    <h3>Usa IA como apoyo</h3>
+                    <ul class="checklist">
+                        <li>Pídeles a asistentes (p. ej., Copilot) un desglose y rango de SP.</li>
+                        <li>Valida con velocidad histórica y complejidad técnica real.</li>
+                        <li>Documenta supuestos que la IA haya utilizado.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="step">
+                <div class="badge">5</div>
+                <div>
+                    <h3>Integra en tu ciclo ágil</h3>
+                    <ul class="checklist">
+                        <li>Planifica el sprint con base en la velocidad y capacidad reales.</li>
+                        <li>Sincroniza remoto/presencial; registra decisiones en el tablero.</li>
+                        <li>Mide métricas: velocidad, lead time, cumplimiento de compromiso.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="step">
+                <div class="badge">6</div>
+                <div>
+                    <h3>Practica con el simulador</h3>
+                    <p>Ejecuta la práctica guiada de abajo: estimen la historia del <code>CSV de ventas</code>, exporten resultados y compartan.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="badge">7</div>
+                <div>
+                    <h3>Costea en USD y simula roles</h3>
+                    <p>Usa la calculadora para convertir SP a horas y costos en <strong>USD</strong>, considerando roles (PO/SM/Dev/QA) y modo remoto/híbrido/presencial.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PLANNING POKER -->
+    <section id="planning-poker" class="container">
+        <h2>Mecánica y simulador de Planning Poker</h2>
+        <div class="grid grid-2">
+            <div class="card">
+                <h3>Flujo recomendado (remoto/híbrido)</h3>
+                <ol>
+                    <li><strong>Preparación (PO):</strong> objetivos del sprint y criterios de “Listo”.</li>
+                    <li><strong>Tablero:</strong> Miro/Trello con historias claras y enlaces.</li>
+                    <li><strong>Sesión:</strong> votación privada → revelar → discutir outliers → consenso.</li>
+                    <li><strong>Cierre:</strong> registrar SP por historia y supuestos clave.</li>
+                </ol>
+            </div>
+            <div class="card">
+                <h3>Mazo (Fibonacci)</h3>
+                <div class="deck" aria-label="Mazo de Planning Poker">
+                    <div class="card-pp">0</div><div class="card-pp">0.5</div><div class="card-pp">1</div>
+                    <div class="card-pp">2</div><div class="card-pp">3</div><div class="card-pp">5</div>
+                    <div class="card-pp">8</div><div class="card-pp">13</div><div class="card-pp">20</div>
+                    <div class="card-pp">40</div><div class="card-pp">100</div><div class="card-pp">?</div>
+                </div>
+                <p class="muted" style="margin-top:.75rem">Puedes usar tallas (XS–XL) si el equipo lo prefiere.</p>
+            </div>
+        </div>
+
+        <!-- Simulador -->
+        <div class="card" style="margin-top:var(--space-6)">
+            <h3>Simulador local de Planning Poker</h3>
+            <p>Úsalo para practicar la dinámica (para trabajo real, usa tu pizarra colaborativa).</p>
+            <div class="grid grid-3">
+                <div>
+                    <label for="story">Historia a estimar</label>
+                    <input id="story" type="text" placeholder="Ej: Procesar CSV de ventas y generar top 10" style="width:100%;padding:.6rem;border-radius:10px;border:1px solid var(--border);background:var(--surface)"/>
+                </div>
+                <div>
+                    <label for="timebox">Timebox (min)</label>
+                    <input id="timebox" type="number" min="1" value="3" style="width:100%;padding:.6rem;border-radius:10px;border:1px solid var(--border);background:var(--surface)"/>
+                </div>
+                <div style="display:flex;align-items:flex-end;gap:.5rem">
+                    <button id="startTimer" class="btn">⏱️ Iniciar</button>
+                    <div id="timer" class="pill">00:00</div>
+                </div>
+            </div>
+            <div class="grid grid-3" style="margin-top:var(--space-4)">
+                <div>
+                    <label>Integrantes</label>
+                    <div id="players"></div>
+                    <div style="display:flex;gap:.5rem;margin-top:.5rem">
+                        <input id="newPlayer" type="text" placeholder="Nombre" style="flex:1;padding:.6rem;border-radius:10px;border:1px solid var(--border);background:var(--surface)"/>
+                        <button id="addPlayer" class="btn">➕ Agregar</button>
+                    </div>
+                </div>
+                <div>
+                    <label>Votaciones</label>
+                    <div id="votes"></div>
+                </div>
+                <div>
+                    <label>Acciones</label>
+                    <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+                        <button id="reveal" class="btn primary">👁️ Revelar</button>
+                        <button id="revote" class="btn ghost">🔁 Revotar</button>
+                        <button id="exportPP" class="btn ghost">⬇️ Exportar CSV</button>
+                    </div>
+                    <div id="ppResult" style="margin-top:var(--space-4)"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IA -->
+    <section id="ia" class="container">
+        <h2>Uso de IA para asistirte en estimaciones iniciales</h2>
+        <div class="grid grid-2">
+            <div class="card">
+                <h3>¿Cuándo usar IA?</h3>
+                <ul class="checklist">
+                    <li>Para <strong>aproximaciones iniciales</strong> con referencias de historias similares.</li>
+                    <li>Para <strong>desglose</strong> de tareas y mapeo de dependencias.</li>
+                    <li>Para evaluar <strong>impacto</strong> de cambios de alcance.</li>
+                </ul>
+                <p class="muted">La IA no reemplaza al equipo: úsala como punto de partida y valida con datos propios.</p>
+            </div>
+            <div class="card">
+                <h3>Prompt de ejemplo (asistente de código)</h3>
+                <pre><button class="copy-btn" aria-label="Copiar">Copiar</button><code>
+Eres un asistente técnico. Dado este ticket:
+- Historia: &lt;descripción breve&gt;
+- Criterios de aceptación: &lt;lista&gt;
+- Tech stack: Python, pandas, API interna, CI/CD
+- Riesgos: &lt;infra, datos, dependencias&gt;
+Tarea: Propón subtareas, riesgos y un rango inicial en SP
+basado en historias similares. Expón suposiciones y
+datos necesarios para calibrar con la velocidad del equipo (28 SP/sprint).
+          </code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTEGRACIÓN -->
+    <section id="integracion" class="container">
+        <h2>Integración de estimaciones en ciclos ágiles (entornos híbridos)</h2>
+        <div class="grid grid-3">
+            <div class="card"><h3>Backlog Refinement</h3><p>Aclara objetivos, criterios y dependencias. Marca lo no estimable como <em>spikes</em>.</p></div>
+            <div class="card"><h3>Planificación de Sprint</h3><p>Usa <strong>velocidad histórica</strong> y capacidad real. Evita sobrecargar.</p></div>
+            <div class="card"><h3>Híbrido Remoto/Presencial</h3><p>Sesiones síncronas breves + preparación asíncrona. Documenta acuerdos.</p></div>
+        </div>
+        <div class="card callout" style="margin-top:var(--space-6)">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 6a6 6 0 0 0-6 6v5h12v-5a6 6 0 0 0-6-6Zm-4 11h8v1H8v-1Z"/></svg>
+            <div><strong>Checklist de integración:</strong> (1) velocidad histórica, (2) calendario del sprint, (3) bloqueos y riesgos, (4) métricas de salida, (5) retro para afinar estimaciones.</div>
+        </div>
+    </section>
+
+    <!-- PRÁCTICA -->
+    <section id="practica" class="container">
+        <h2>Práctica (grupos): Planning Poker para un script de análisis de ventas</h2>
+        <div class="card">
+            <ol>
+                <li>Forma grupos de 3–6. Asigna <strong>Product Owner</strong> y <strong>Scrum Master</strong> temporales.</li>
+                <li>Historia: “Como analista, quiero un script en <strong>Python</strong> que lea <code>ventas.csv</code>, limpie datos y calcule el <em>Top 10</em> por ingresos”.</li>
+                <li>Desglose (sugerido): leer CSV, normalizar columnas, tratar nulos, agrupar/ordenar, exportar <code>reporte.csv</code>.</li>
+                <li>Estima con Planning Poker (simulador o pizarra). Timebox: 3–5 min.</li>
+                <li>Documenta suposiciones y el consenso alcanzado (SP).</li>
+            </ol>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:var(--space-4)">
+                <button id="downloadSampleCSV" class="btn">⬇️ Descargar <code>ventas.csv</code> ejemplo</button>
+                <button id="downloadPython" class="btn ghost">⬇️ Descargar script Python</button>
+            </div>
+            <details style="margin-top:var(--space-4)"><summary>Ver script Python de ejemplo (pandas)</summary>
+                <pre><button class="copy-btn" aria-label="Copiar">Copiar</button><code>
+import pandas as pd
+
+df = pd.read_csv("ventas.csv")
+df.columns = [c.strip().lower() for c in df.columns]
+df["unidades"] = pd.to_numeric(df["unidades"], errors="coerce").fillna(0)
+df["precio"] = pd.to_numeric(df["precio"], errors="coerce").fillna(0.0)
+df["ingresos"] = df["unidades"] * df["precio"]
+
+top10 = (df.groupby(["producto"], as_index=False)["ingresos"]
+           .sum()
+           .sort_values("ingresos", ascending=False)
+           .head(10))
+
+top10.to_csv("reporte.csv", index=False)
+print(top10)
+          </code></pre>
+            </details>
+        </div>
+    </section>
+
+    <!-- TAREA -->
+    <section id="tarea" class="container">
+        <h2>Tarea: Analiza un repositorio GitHub y estima story points en Google Sheets</h2>
+        <div class="card">
+            <ol>
+                <li>Elige un proyecto open-source (p. ej., utilidades de datos en Python).</li>
+                <li>Revisa issues abiertas/recientes y clasifícalas por complejidad y dependencias.</li>
+                <li>Completa la <strong>plantilla CSV</strong> y súbela a Google Sheets para asignar SP y simular velocidad.</li>
+                <li>Entrega: hoja con SP por issue, velocidad hipotética (p. ej., 25–30 SP/sprint) y sprints estimados.</li>
+            </ol>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:var(--space-4)">
+                <button id="downloadTemplateCSV" class="btn">⬇️ Plantilla CSV para Sheets</button>
+            </div>
+            <details style="margin-top:var(--space-4)"><summary>Columnas sugeridas y fórmula</summary>
+                <ul class="checklist">
+                    <li><code>id, titulo, tipo, complejidad, riesgo, dependencias, story_points</code></li>
+                    <li>Sprints ≈ <code>=REDONDEAR.MAS(SUMA(story_points)/velocidad; 0)</code></li>
+                </ul>
+            </details>
+        </div>
+    </section>
+
+    <!-- APLICACIÓN / COSTOS USD -->
+    <section id="aplicacion" class="container">
+        <h2>Aplicación: roles y costos en <u>USD</u> basados en estimaciones</h2>
+        <div class="card">
+            <h3>Parámetros del proyecto</h3>
+            <div class="grid grid-3">
+                <div><label>Total de story points</label><input id="spTotal" type="number" min="1" value="80" style="width:100%;padding:.6rem;border-radius:10px;border:1px solid var(--border);background:var(--surface)"/></div>
+                <div><label>Velocidad (SP / sprint)</label><input id="velocidad" type="number" min="1" value="28" style="width:100%;padding:.6rem;border-radius:10px;border:1px solid var(--border);background:var(--surface)"/></div>
+                <div><label>Horas por SP (base)</label><input id="hPorSP" type="number" min="1" value="6" style="width:100%;padding:.6rem;border-radius:10px;border:1px solid var(--border);background:var(--surface)"/></div>
+            </div>
+
+            <div class="grid grid-3" style="margin-top:var(--space-4)">
+                <div>
+                    <label>Modo de trabajo</label>
+                    <select id="modo" style="width:100%;padding:.6rem;border-radius:10px;border:1px solid var(--border);background:var(--surface)">
+                        <option value="1">Presencial (factor 1.00)</option>
+                        <option value="0.95" selected>Híbrido (factor 0.95)</option>
+                        <option value="0.9">Remoto (factor 0.90)</option>
+                    </select>
+                    <p class="muted" style="margin-top:.35rem">El factor ajusta la <em>velocidad efectiva</em>.</p>
+                </div>
+                <div><label>Días por sprint</label><input id="diasSprint" type="number" min="1" value="10" style="width:100%;padding:.6rem;border-radius:10px;border:1px solid var(--border);background:var(--surface)"/></div>
+                <div style="display:flex;align-items:flex-end"><button id="calc" class="btn primary" style="width:100%">Calcular</button></div>
+            </div>
+
+            <h3 style="margin-top:var(--space-6)">Roles del equipo</h3>
+            <div class="muted" style="margin-bottom:.5rem">Proporción de horas por SP; puedes ajustarlo. <strong>Moneda: USD</strong>.</div>
+            <div style="overflow:auto">
+                <table id="rolesTable" aria-label="Tabla de roles y tarifas">
+                    <thead>
+                    <tr><th>Rol</th><th>Tarifa (USD/h)</th><th>% horas por SP</th><th></th></tr>
+                    </thead>
+                    <tbody>
+                    <tr><td><input value="Product Owner" /></td><td><input type="number" value="60" /></td><td><input type="number" value="10" /></td><td></td></tr>
+                    <tr><td><input value="Scrum Master" /></td><td><input type="number" value="55" /></td><td><input type="number" value="10" /></td><td></td></tr>
+                    <tr><td><input value="Dev de Datos" /></td><td><input type="number" value="50" /></td><td><input type="number" value="50" /></td><td></td></tr>
+                    <tr><td><input value="Data Engineer" /></td><td><input type="number" value="65" /></td><td><input type="number" value="20" /></td><td></td></tr>
+                    <tr><td><input value="QA/Tester" /></td><td><input type="number" value="45" /></td><td><input type="number" value="10" /></td><td></td></tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            <button id="addRole" class="btn">➕ Agregar rol</button>
+                            <button id="exportCostCSV" class="btn ghost">⬇️ Exportar costos (CSV, USD)</button>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div id="resultados" class="result" style="margin-top:var(--space-6)">
+                <div class="stat"><div class="label">Sprints estimados</div><div id="outSprints" class="value">—</div></div>
+                <div class="stat"><div class="label">Duración (días)</div><div id="outDias" class="value">—</div></div>
+                <div class="stat"><div class="label">Horas totales</div><div id="outHoras" class="value">—</div></div>
+                <div class="stat"><div class="label">Costo total (USD)</div><div id="outCosto" class="value">—</div></div>
+            </div>
+
+            <details style="margin-top:var(--space-4)"><summary>Cómo se calcula</summary>
+                <p><strong>Velocidad efectiva</strong> = velocidad × factor (modo).<br/>
+                    <strong>Sprints</strong> = CEIL(SP totales / velocidad efectiva).<br/>
+                    <strong>Horas totales</strong> = SP totales × horas por SP.<br/>
+                    <strong>Horas por rol</strong> = horas totales × (% rol / 100).<br/>
+                    <strong>Costo por rol</strong> = horas por rol × tarifa (USD/h); suma = costo total.</p>
+            </details>
+
+            <h3 style="margin-top:var(--space-6)">Código Python (pandas) equivalente</h3>
+            <pre><button class="copy-btn" aria-label="Copiar">Copiar</button><code>
+import math
+import pandas as pd
+
+sp_total = 80
+velocidad = 28
+factor = 0.95  # híbrido
+h_por_sp = 6
+
+roles = pd.DataFrame([
+    {"rol":"Product Owner","tarifa":60,"porc":10},
+    {"rol":"Scrum Master","tarifa":55,"porc":10},
+    {"rol":"Dev de Datos","tarifa":50,"porc":50},
+    {"rol":"Data Engineer","tarifa":65,"porc":20},
+    {"rol":"QA/Tester","tarifa":45,"porc":10},
+])
+
+vel_efectiva = velocidad * factor
+sprints = math.ceil(sp_total / vel_efectiva)
+horas_totales = sp_total * h_por_sp
+
+roles["horas"] = horas_totales * (roles["porc"]/100)
+roles["costo_usd"] = roles["horas"] * roles["tarifa"]
+
+costo_total_usd = roles["costo_usd"].sum()
+print({"sprints": sprints, "horas_totales": horas_totales, "costo_total_usd": costo_total_usd})
+print(roles)
+        </code></pre>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="container">
+        <h2>Preguntas frecuentes</h2>
+        <div class="card">
+            <h3>¿Puntos vs horas?</h3>
+            <p>Los puntos comparan complejidad; convierte a horas solo para costos (USD) y planificación macro, no como promesa exacta.</p>
+            <h3>¿Qué hago con outliers en Planning Poker?</h3>
+            <p>Pide a quien votó más alto y más bajo que expliquen; ajusta supuestos o divide la historia si hay mucha incertidumbre.</p>
+            <h3>¿La IA no “engaña” la estimación?</h3>
+            <p>No. Acelera el análisis inicial; el equipo decide con base en datos y contexto.</p>
+        </div>
+    </section>
+
+    <footer class="container2">
+        <p>© 2025 · Tutorial “Técnicas de Estimación Ágil y Herramientas Modernas”. Arle Morales Ortiz</p>
+    </footer>
+</main>
+
+<button class="btn to-top" id="toTop" aria-label="Volver arriba">⬆️</button>
+
+<script>
+    // ======= Utilidades =======
+    const $=(s,el=document)=>el.querySelector(s);
+    const $$=(s,el=document)=>Array.from(el.querySelectorAll(s));
+
+    // Tema (claro/oscuro/auto)
+    const root=document.documentElement;
+    const themeToggle=$("#themeToggle");
+    const savedTheme=localStorage.getItem("theme")||"auto";
+    root.setAttribute("data-theme", savedTheme);
+    themeToggle.setAttribute("aria-pressed", savedTheme!=="light");
+    themeToggle.addEventListener("click", ()=>{
+        const curr=root.getAttribute("data-theme");
+        const next=curr==="light" ? "dark" : (curr==="dark" ? "auto" : "light");
+        root.setAttribute("data-theme", next);
+        themeToggle.setAttribute("aria-pressed", next!=="light");
+        localStorage.setItem("theme", next);
+        themeToggle.title = `Tema: ${next}`;
+    });
+
+    // Menú móvil
+    const menuBtn=$(".menu-toggle");
+    const menu=$("#menu");
+    menuBtn?.addEventListener("click", ()=>{
+        menu.classList.toggle("open");
+        menuBtn.setAttribute("aria-expanded", String(menu.classList.contains("open")));
+    });
+
+    // Progreso de lectura + botón Arriba
+    const progress=$("#progress");
+    const onScroll=()=>{
+        const h=document.documentElement;
+        const scrolled=(h.scrollTop)/(h.scrollHeight-h.clientHeight);
+        progress.style.width=`${scrolled*100}%`;
+        $("#toTop").classList.toggle("show", h.scrollTop>800);
+    };
+    document.addEventListener("scroll", onScroll, {passive:true});
+    $("#toTop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+    // Copiar código
+    $$(".copy-btn").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+            const code=btn.nextElementSibling.innerText;
+            navigator.clipboard.writeText(code).then(()=>{
+                const prev=btn.textContent; btn.textContent="¡Copiado!"; setTimeout(()=>btn.textContent=prev,1200);
+            });
+        });
+    });
+
+    // ======= Simulador Planning Poker =======
+    const defaultPlayers=["Ana","Luis","Sofía","Diego"];
+    const playersEl=$("#players"), votesEl=$("#votes"), ppResult=$("#ppResult");
+    const state={players:[],votes:{},revealed:false,history:[]};
+
+    function renderPlayers(){
+        playersEl.innerHTML="";
+        state.players.forEach(name=>{
+            const row=document.createElement("div");
+            row.style.display="flex";row.style.alignItems="center";row.style.gap=".5rem";row.style.marginBottom=".5rem";
+            row.innerHTML=`<span class="avatar" aria-hidden="true">${name[0]?.toUpperCase()||"?"}</span>
+                       <span>${name}</span>
+                       <button class="btn small ghost" aria-label="Eliminar">Eliminar</button>`;
+            row.querySelector("button").addEventListener("click", ()=>{
+                state.players=state.players.filter(p=>p!==name);
+                delete state.votes[name];
+                renderPlayers(); renderVotes();
+            });
+            playersEl.appendChild(row);
+        });
+    }
+    function renderVotes(){
+        votesEl.innerHTML="";
+        state.players.forEach(name=>{
+            const wrap=document.createElement("div");
+            wrap.style.marginBottom=".5rem";
+            const select=document.createElement("select");
+            ["","0","0.5","1","2","3","5","8","13","20","40","100","?"].forEach(v=>{
+                const opt=document.createElement("option");
+                opt.value=v; opt.textContent=v===""? "— elige carta —" : v;
+                select.appendChild(opt);
+            });
+            select.addEventListener("change", ()=>{ state.votes[name]=select.value; });
+            wrap.append(`👤 ${name} `, select);
+            if(state.revealed && state.votes[name]){
+                const badge=document.createElement("span");
+                badge.className="vote"; badge.style.marginLeft=".5rem"; badge.textContent=`${state.votes[name]}`;
+                wrap.appendChild(badge);
+            }
+            votesEl.appendChild(wrap);
+        });
+    }
+    function suggestConsensus(values){
+        const nums=values.map(Number).filter(v=>!Number.isNaN(v));
+        if(!nums.length) return {moda:"—",mediana:"—",rango:"—"};
+        const freq={}; nums.forEach(v=>freq[v]=(freq[v]||0)+1);
+        const moda=Object.entries(freq).sort((a,b)=>b[1]-a[1])[0][0];
+        const sorted=nums.slice().sort((a,b)=>a-b);
+        const mid=Math.floor(sorted.length/2);
+        const mediana=sorted.length%2? sorted[mid] : ((sorted[mid-1]+sorted[mid])/2);
+        const rango=`${sorted[0]}–${sorted[sorted.length-1]}`;
+        return {moda,mediana,rango};
+    }
+
+    $("#addPlayer").addEventListener("click", ()=>{
+        const name=$("#newPlayer").value.trim();
+        if(name && !state.players.includes(name)){ state.players.push(name); $("#newPlayer").value=""; }
+        renderPlayers(); renderVotes();
+    });
+    // por defecto
+    state.players=defaultPlayers.slice(); renderPlayers(); renderVotes();
+
+    $("#reveal").addEventListener("click", ()=>{
+        state.revealed=true;
+        const values=state.players.map(p=>state.votes[p]||"");
+        const {moda,mediana,rango}=suggestConsensus(values);
+        const story=$("#story").value||"Historia sin título";
+        const row={fecha:new Date().toISOString(), story, values:values.join("|"), moda, mediana, rango};
+        state.history.push(row);
+        ppResult.innerHTML=`
+        <div class="callout" style="margin-top:.5rem">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2Zm-1 15-5-5 1.5-1.5L11 13l5.5-5.5L18 9l-7 8Z"/></svg>
+          <div><strong>Resultado:</strong> moda = <strong>${moda}</strong>, mediana = <strong>${mediana}</strong>, rango = <strong>${rango}</strong>.
+            <div class="muted">Discute extremos; acuerda moda/mediana y registra el consenso.</div>
+          </div>
+        </div>`;
+        renderVotes();
+    });
+    $("#revote").addEventListener("click", ()=>{
+        state.revealed=false; state.votes={}; ppResult.innerHTML=""; renderVotes();
+    });
+    $("#exportPP").addEventListener("click", ()=>{
+        if(!state.history.length){ alert("No hay resultados para exportar."); return; }
+        const header="fecha,story,votos,moda,mediana,rango\n";
+        const rows=state.history.map(r=>[r.fecha, JSON.stringify(r.story).replace(/,/g,";"), r.values, r.moda, r.mediana, r.rango].join(",")).join("\n");
+        const blob=new Blob([header+rows], {type:"text/csv;charset=utf-8;"});
+        const url=URL.createObjectURL(blob); const a=document.createElement("a");
+        a.href=url; a.download="planning-poker-resultados.csv"; a.click(); URL.revokeObjectURL(url);
+    });
+
+    // Timer
+    let timerId=null;
+    $("#startTimer").addEventListener("click", ()=>{
+        const min=parseInt($("#timebox").value||"3",10);
+        const end=Date.now()+min*60*1000;
+        timerId && clearInterval(timerId);
+        timerId=setInterval(()=>{
+            const ms=end-Date.now(); const done=ms<=0;
+            const s=Math.max(0, Math.floor(ms/1000));
+            const mm=String(Math.floor(s/60)).padStart(2,"0"); const ss=String(s%60).padStart(2,"0");
+            $("#timer").textContent=`${mm}:${ss}`; if(done){ clearInterval(timerId); $("#timer").textContent="⏰ Fin"; }
+        }, 200);
+    });
+
+    // Descargas
+    $("#downloadSampleCSV").addEventListener("click", ()=>{
+        const sample=[
+            "fecha,region,producto,unidades,precio",
+            "2025-01-05,Norte,A,10,9.9",
+            "2025-01-06,Sur,B,5,19.9",
+            "2025-01-07,Norte,C,12,7.5",
+            "2025-01-08,Este,A,9,9.9",
+            "2025-01-09,Oeste,D,8,12.0",
+            "2025-01-10,Norte,E,4,30.0"
+        ].join("\n");
+        const blob=new Blob([sample], {type:"text/csv;charset=utf-8;"}); const url=URL.createObjectURL(blob);
+        const a=document.createElement("a"); a.href=url; a.download="ventas.csv"; a.click(); URL.revokeObjectURL(url);
+    });
+    $("#downloadPython").addEventListener("click", ()=>{
+        const py=`import pandas as pd
+
+df = pd.read_csv("ventas.csv")
+df.columns = [c.strip().lower() for c in df.columns]
+df["unidades"] = pd.to_numeric(df["unidades"], errors="coerce").fillna(0)
+df["precio"] = pd.to_numeric(df["precio"], errors="coerce").fillna(0.0)
+df["ingresos"] = df["unidades"] * df["precio"]
+
+top10 = (df.groupby(["producto"], as_index=False)["ingresos"]
+           .sum()
+           .sort_values("ingresos", ascending=False)
+           .head(10))
+
+top10.to_csv("reporte.csv", index=False)
+print(top10)
+`;
+        const blob=new Blob([py], {type:"text/x-python;charset=utf-8;"}); const url=URL.createObjectURL(blob);
+        const a=document.createElement("a"); a.href=url; a.download="analisis_ventas.py"; a.click(); URL.revokeObjectURL(url);
+    });
+    $("#downloadTemplateCSV").addEventListener("click", ()=>{
+        const template=[
+            "id,titulo,tipo,complejidad,riesgo,dependencias,story_points",
+            "GH-101,Normalizar columnas,enhancement,media,baja,lib pandas,3",
+            "GH-102,Soporte CSV grandes,performance,alta,IO/CPU,8",
+            "GH-103,Pruebas unitarias,test,media,media,pytest,5"
+        ].join("\n");
+        const blob=new Blob([template], {type:"text/csv;charset=utf-8;"}); const url=URL.createObjectURL(blob);
+        const a=document.createElement("a"); a.href=url; a.download="plantilla_estimacion.csv"; a.click(); URL.revokeObjectURL(url);
+    });
+
+    // Calculadora de costos (USD)
+    function readRoles(){
+        const rows=$$("#rolesTable tbody tr");
+        const roles=rows.map(tr=>{
+            const [rolEl, tarifaEl, porcEl]=tr.querySelectorAll("input");
+            return {rol:rolEl.value.trim()||"Rol", tarifa:parseFloat(tarifaEl.value||"0"), porc:parseFloat(porcEl.value||"0")};
+        });
+        const totalPorc=roles.reduce((s,r)=>s+(isNaN(r.porc)?0:r.porc),0);
+        if(Math.abs(totalPorc-100)>0.01){
+            // normaliza automáticamente para facilitar
+            return roles.map(r=>({...r, porc: r.porc/totalPorc*100}));
+        }
+        return roles;
+    }
+    function fmt(n, currency=false){
+        if(!isFinite(n)) return "—";
+        return currency ? new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0}).format(n)
+            : new Intl.NumberFormat().format(n);
+    }
+    $("#addRole").addEventListener("click", ()=>{
+        const tr=document.createElement("tr");
+        tr.innerHTML=`<td><input value="Nuevo rol" /></td>
+                    <td><input type="number" value="50" /></td>
+                    <td><input type="number" value="10" /></td>
+                    <td><button class="btn small ghost">Eliminar</button></td>`;
+        tr.querySelector("button").addEventListener("click", ()=>{ tr.remove(); });
+        $("#rolesTable tbody").appendChild(tr);
+    });
+
+    let lastCostRows=[];
+    $("#calc").addEventListener("click", ()=>{
+        const spTotal=parseFloat($("#spTotal").value||"0");
+        const vel=parseFloat($("#velocidad").value||"0");
+        const hPorSP=parseFloat($("#hPorSP").value||"0");
+        const factor=parseFloat($("#modo").value||"1");
+        const diasSprint=parseInt($("#diasSprint").value||"10",10);
+        if(!(spTotal>0 && vel>0 && hPorSP>0 && diasSprint>0)){ alert("Revisa los parámetros."); return; }
+
+        const velEf=vel*factor;
+        const sprints=Math.ceil(spTotal/velEf);
+        const horasTotales=spTotal*hPorSP;
+
+        const roles=readRoles();
+        const rows=roles.map(r=>{
+            const horas=horasTotales*(r.porc/100);
+            const costo=horas*r.tarifa; // USD
+            return {...r, horas, costo};
+        });
+        lastCostRows=rows;
+
+        $("#outSprints").textContent=fmt(sprints);
+        $("#outDias").textContent=fmt(sprints*diasSprint);
+        $("#outHoras").textContent=fmt(horasTotales);
+        const costoTotal=rows.reduce((s,r)=>s+r.costo,0);
+        $("#outCosto").textContent=fmt(costoTotal,true);
+    });
+    $("#exportCostCSV").addEventListener("click", ()=>{
+        if(!lastCostRows.length){ alert("Primero calcula para generar resultados."); return; }
+        const header="rol,tarifa_usd_h,porcentaje,horas,costo_usd\n";
+        const lines=lastCostRows.map(r=>[r.rol,r.tarifa,r.porc.toFixed(2),r.horas.toFixed(2),r.costo.toFixed(2)].join(",")).join("\n");
+        const blob=new Blob([header+lines], {type:"text/csv;charset=utf-8;"}); const url=URL.createObjectURL(blob);
+        const a=document.createElement("a"); a.href=url; a.download="costeo_estimacion_usd.csv"; a.click(); URL.revokeObjectURL(url);
+    });
+</script>
+</body>
+</html>
